@@ -6,6 +6,7 @@ function App() {
   return (
     <AuthProvider>
       <div className='container'>
+        <Navbar />
       </div>
     </AuthProvider>
   );
