@@ -6,6 +6,8 @@ import { HomePage } from './layouts/HomePage/HomePage';
 import { Footer } from './layouts/Navbar/Footer';
 import { LoginPage } from './layouts/Auth/LoginPage';
 import { RegisterPage } from './layouts/Auth/RegisterPage';
+import { ProtectedRoute } from './utils/ProtectedRoute';
+import { TodosPage } from './layouts/TodoPage/TodosPage';
 
 function App() {
   return (
@@ -17,6 +19,12 @@ function App() {
           <Route path='/' Component={HomePage} />
           <Route path='/login' Component={LoginPage} />
           <Route path='/register' Component={RegisterPage} />
+          <Route path='/todos' element={
+            <ProtectedRoute>
+              <TodosPage />
+            </ProtectedRoute>
+          }>
+          </Route>
         </Routes>
 
         <Footer />
