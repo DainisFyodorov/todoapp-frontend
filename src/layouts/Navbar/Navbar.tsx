@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../../utils/AuthProvider";
 
 export const Navbar = () => {
@@ -12,7 +13,7 @@ export const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
-                <a className="navbar-brand" href="/">ToDo Application</a>
+                <Link className="navbar-brand" to="/">ToDo Application</Link>
                 
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -21,7 +22,7 @@ export const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <a className="nav-link" aria-current="page" href="/">Home</a>
+                            <Link className="nav-link" aria-current="page" to="/">Home</Link>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link" href="/">ToDos</a>
@@ -31,7 +32,7 @@ export const Navbar = () => {
                         <button type="button" className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
                         :
                         <div className="d-flex justify-content-start">
-                            <a className="btn btn-outline-success me-2" href="/">Sign In</a>
+                            <Link className="btn btn-outline-success me-2" to="/login">Sign In</Link>
                             <a className="btn btn-outline-secondary" href="/">Register</a>
                         </div>
                     }
