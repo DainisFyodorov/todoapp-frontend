@@ -1,7 +1,8 @@
 import './App.css';
 import { AuthProvider } from './utils/AuthProvider';
 import { Navbar } from './layouts/Navbar/Navbar';
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
+import { HomePage } from './layouts/HomePage/HomePage';
 
 function App() {
   return (
@@ -9,9 +10,9 @@ function App() {
       <AuthProvider>
         <Navbar />
         
-        <Route path='/'>
-          {/* home page */}
-        </Route>
+        <Routes>
+          <Route path='/' Component={HomePage} />
+        </Routes>
       </AuthProvider>
     </div>
   );
