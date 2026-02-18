@@ -1,14 +1,19 @@
 import './App.css';
 import { AuthProvider } from './utils/AuthProvider';
 import { Navbar } from './layouts/Navbar/Navbar';
+import { Route } from 'react-router-dom';
 
 function App() {
   return (
-    <AuthProvider>
-      <div className='container'>
+    <div className='d-flex flex-column min-vh-100'>
+      <AuthProvider>
         <Navbar />
-      </div>
-    </AuthProvider>
+        
+        <Route path='/'>
+          {/* home page */}
+        </Route>
+      </AuthProvider>
+    </div>
   );
 }
 
