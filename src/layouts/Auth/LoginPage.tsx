@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useAuth } from "../../utils/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
 
     const { setIsLoggedIn } = useAuth();
+    const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -18,19 +19,21 @@ export const LoginPage = () => {
             const response = await fetch('http://localhost:8080/api/auth/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 credentials: 'include',
-                body: JSON.stringify({ username, password })
+                body: new URLSearchParams({
+                    username: username,
+                    password: password
+                })
             });
-
-            console.log(response);
 
             if(!response.ok) {
                 throw new Error('Invalid username or password');
             }
 
             setIsLoggedIn(true);
+            navigate('/', { replace: true })
         } catch (error: any) {
             setError(error.message);
         }
