@@ -24,9 +24,11 @@ export const Navbar = () => {
                         <li className="nav-item">
                             <Link className="nav-link" aria-current="page" to="/">Home</Link>
                         </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/todos">ToDos</Link>
-                        </li>
+                        {isLoggedIn && 
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/todos">ToDos</Link>
+                            </li>
+                        }
                     </ul>
                     {isLoggedIn ?
                         <button type="button" className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
