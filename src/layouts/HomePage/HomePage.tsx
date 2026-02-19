@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../../utils/AuthProvider";
 
 export const HomePage = () => {
@@ -19,12 +20,12 @@ export const HomePage = () => {
 
                         {!isLoggedIn && (
                             <div className="mt-4">
-                                <a href="/" className="btn btn-primary btn-lg me-2">
+                                <Link to="/register" className="btn btn-primary btn-lg me-2">
                                     Get Started
-                                </a>
-                                <a href="/" className="btn btn-outline-secondary btn-lg">
+                                </Link>
+                                <Link to="/login" className="btn btn-outline-secondary btn-lg">
                                     Sign In
-                                </a>
+                                </Link>
                             </div>
                         )}
                     </div>

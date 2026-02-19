@@ -25,7 +25,7 @@ export const Navbar = () => {
                             <Link className="nav-link" aria-current="page" to="/">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="/">ToDos</a>
+                            <Link className="nav-link" to="/todos">ToDos</Link>
                         </li>
                     </ul>
                     {isLoggedIn ?
@@ -33,7 +33,7 @@ export const Navbar = () => {
                         :
                         <div className="d-flex justify-content-start">
                             <Link className="btn btn-outline-success me-2" to="/login">Sign In</Link>
-                            <a className="btn btn-outline-secondary" href="/">Register</a>
+                            <Link className="btn btn-outline-secondary" to="/register">Register</Link>
                         </div>
                     }
                 </div>
