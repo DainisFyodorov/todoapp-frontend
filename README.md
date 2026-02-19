@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# ToDoList App - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive web interface for the ToDoList application, built with **React** and **TypeScript**.<br><br>
+Backend part of web application can be found here: [link](https://github.com/DainisFyodorov/todoapp-backend)
 
-## Available Scripts
+## Description
+This is the client-side application for the ToDoList application. It provides a seamless user experience for managing tasks, featuring routes, real-time UI updates, and a clean, intuitive design.<br>
+The app communicates with a Spring Boot REST API to persist data.
 
-In the project directory, you can run:
+## Tech Stack
+- React 19
+- TypeScript
+- React Router Dom
+- Bootstrap
+- Fetch API
+- Context API (for global state management)
 
-### `npm start`
+## Main Features
+- Responsive Task Board: Create, complete, and delete tasks with instant UI feedback
+- Authentication Flow: Custom Login and Registration pages with client-side validation
+- Protected Routes: Secure access to the dashboard - unauthenticated users are automatically redirected to main page
+- Session Management: integration with backend sessions using ```credentials: 'include'```
+- Error Handling: User-friendly alerts for failed login attempts or another errors
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- User Authentication: registration and authentication with data validation
+- Task Management: create, edit, delete and get list of tasks
+- Security: access to task management for authenticated users only
+- REST API: Clear response structure (JSON) and use of correct HTTP statuses (200, 201, 401, 404)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
+1. Make sure that you have **Node.js** and **npm** installed
+2. Clone the repository
+3. Install dependencies using:
+```
+npm install
+```
+5. Create `.env` file in the root directory and configure Backend API URL:
+```
+REACT_APP_API_URL=http://localhost:8080
+```
+7. Start the development server:
+```
+npm start
+```
+The application will be available at: ```http://localhost:3000/```
 
-### `npm test`
+**Notice:**: Ensure the (Backend API)[the frontend part of the application](https://github.com/DainisFyodorov/todoapp-frontend) is running on port 8080 for the application to function correctly.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Project Structure
+- `src/layouts`: Main application views (LoginPage, RegisterPage, HomePage, TodosPage)
+- `src/models`: Models
+- `src/utils`: Helper functions
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Status
+In active development.
