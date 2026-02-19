@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import extractErrorMessage from "../../utils/ExtractErrorMessage";
 
 export const RegisterPage = () => {
     
@@ -32,19 +33,8 @@ export const RegisterPage = () => {
             });
 
             if(!response.ok) {
-                const errorData = await response.json();
-
-                if(typeof errorData === 'object' && errorData !== null) {
-                    let errorMessage = '';
-                    
-                    Object.entries(errorData).forEach(([field, message]) => {
-                        errorMessage = errorMessage + `Field ${field}: ${message}\n`;
-                    });
-                    
-                    throw new Error(errorMessage);
-                }
-
-                throw new Error(errorData);
+                setError(await extractErrorMessage(response));
+                return;
             }
 
             setSuccess('Account created successfully. You can now sign in.');
