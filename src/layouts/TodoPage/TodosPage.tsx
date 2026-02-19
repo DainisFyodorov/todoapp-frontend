@@ -67,6 +67,12 @@ export const TodosPage = () => {
     };
 
     const updateTask = async (task: TaskModel) => {
+
+        if(!task.title.trim()) {
+            setError('Title is required');
+            return;
+        }
+
         const response = await fetch(`http://localhost:8080/api/task/update/${task.id}`, {
             method: 'PUT',
             credentials: 'include',
