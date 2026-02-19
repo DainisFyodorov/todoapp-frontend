@@ -56,7 +56,7 @@ export const TodosPage = () => {
 
         if(!response.ok) {
             setError(await extractErrorMessage(response));
-            throw new Error();
+            return;
         }
 
         const responseJson = await response.json();
