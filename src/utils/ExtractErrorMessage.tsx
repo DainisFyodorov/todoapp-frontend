@@ -2,20 +2,14 @@ const extractErrorMessage = async (response: Response): Promise<string> => {
     try {
         const errorData = await response.json();
 
-        if (typeof errorData === 'object' && errorData !== null) {
-            let errorMessage = '';
-            
-            Object.entries(errorData).forEach(([field, message]) => {
-                errorMessage += `Field ${field}: ${message}\n`;
-            });
-
-            return errorMessage;
+        if (errorData && typeof errorData.message === 'string') {
+            return errorData.message;
         }
 
-        return String(errorData);
+        return JSON.stringify(errorData);
     } catch {
         return 'Something went wrong';
     }
 }
 
-export default extractErrorMessage
+export default extractErrorMessage;
