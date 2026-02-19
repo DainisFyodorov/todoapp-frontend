@@ -14,6 +14,15 @@ export const RegisterPage = () => {
         setSuccess(null);
 
         try {
+
+            if(!username.trim() || username.length < 3) {
+                throw new Error('Username field must be at least 3 characters long');
+            }
+
+            if(!password.trim() || password.length < 3) {
+                throw new Error('Password field must be at least 3 characters long');
+            }
+
             const response = await fetch('http://localhost:8080/api/auth/register', {
                 method: 'POST',
                 headers: {
@@ -57,8 +66,9 @@ export const RegisterPage = () => {
                             </h3>
 
                             {error && (
-                                <div className="alert alert-danger">
-                                    {error}
+                                <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <pre className="mb-0">{error}</pre>
+                                    <button type="button" className="btn-close" onClick={() => setError(null)} />
                                 </div>
                             )}
 
