@@ -24,7 +24,7 @@ export const RegisterPage = () => {
                 throw new Error('Password field must be at least 3 characters long');
             }
 
-            const response = await fetch('http://localhost:8080/api/auth/register', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

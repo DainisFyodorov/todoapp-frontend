@@ -14,7 +14,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const checkAuth = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/auth/status', { credentials: 'include' });
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/status`, { credentials: 'include' });
             
             if (!response.ok) {
                 throw new Error('Something went wrong');

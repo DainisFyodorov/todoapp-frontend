@@ -22,7 +22,7 @@ export const TodosPage = () => {
                 throw new Error('You must be logged in');
             }
 
-            const response = await fetch('http://localhost:8080/api/task/get', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/task/get`, {
                 credentials: 'include'
             });
 
@@ -45,7 +45,7 @@ export const TodosPage = () => {
 
         const taskToAdd = new AddTaskRequest(newTitle, newDescription, false);
 
-        const response = await fetch('http://localhost:8080/api/task/create', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/task/create`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -73,7 +73,7 @@ export const TodosPage = () => {
             return;
         }
 
-        const response = await fetch(`http://localhost:8080/api/task/update/${task.id}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/task/update/${task.id}`, {
             method: 'PUT',
             credentials: 'include',
             headers: {
@@ -103,7 +103,7 @@ export const TodosPage = () => {
 
     const deleteTodo = async (id: number) => {
 
-        const response = await fetch(`http://localhost:8080/api/task/delete/${id}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/task/delete/${id}`, {
             method: 'DELETE',
             credentials: 'include'
         });

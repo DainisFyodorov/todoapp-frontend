@@ -6,7 +6,7 @@ export const Navbar = () => {
     const { isLoggedIn, setIsLoggedIn } = useAuth();
 
     const handleLogout = async () => {
-        await fetch('http://localhost:8080/api/auth/logout', { method: 'POST', credentials: 'include' });
+        await fetch(`${process.env.REACT_APP_API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
         setIsLoggedIn(false);
     }
 
