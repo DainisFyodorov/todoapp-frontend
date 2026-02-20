@@ -1,4 +1,5 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react"
+import { SpinnerLoading } from "../layouts/Util/SpinnerLoading";
 
 interface AuthContextType {
     isLoggedIn: boolean;
@@ -34,6 +35,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     useEffect(() => {
         checkAuth();
     }, []);
+
+    if(loading) {
+        return <SpinnerLoading />
+    }
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, checkAuth }}>

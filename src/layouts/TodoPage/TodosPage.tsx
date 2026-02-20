@@ -5,6 +5,7 @@ import AddTaskRequest from "../../models/AddTaskRequest";
 import { EditRow } from "./components/EditRow";
 import { Todo } from "./components/Todo";
 import extractErrorMessage from "../../utils/ExtractErrorMessage";
+import { SpinnerLoading } from "../Util/SpinnerLoading";
 
 export const TodosPage = () => {
 
@@ -15,6 +16,7 @@ export const TodosPage = () => {
     const [newDescription, setNewDescription] = useState("");
     const [editingId, setEditingId] = useState<number | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchTodos = async () => {
@@ -28,10 +30,11 @@ export const TodosPage = () => {
 
             const data = await response.json();
             setTodos(data);
+            setLoading(false);
         };
 
         fetchTodos().catch((error: any) => {
-            console.log(error.message);
+            setError(error.message);
         });
     }, [isLoggedIn]);
 
@@ -137,6 +140,10 @@ export const TodosPage = () => {
         .then(() => setEditingId(null))
         .catch(() => {});
     };
+
+    if(loading) {
+        return <SpinnerLoading />
+    }
 
     return (
         <div className="container py-5">
