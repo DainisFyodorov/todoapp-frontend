@@ -41,12 +41,14 @@ export const TodosPage = () => {
     const addTodo = async () => {
         setError(null);
 
-        if (!newTitle.trim()) {
+        const newTitleTrimmed = newTitle.trim();
+
+        if (!newTitleTrimmed) {
             setError('Title is required');
             return;
         }
 
-        const taskToAdd = new AddTaskRequest(newTitle, newDescription, false);
+        const taskToAdd = new AddTaskRequest(newTitleTrimmed, newDescription, false);
 
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/task/create`, {
             method: 'POST',
@@ -70,6 +72,8 @@ export const TodosPage = () => {
     };
 
     const updateTask = async (task: TaskModel) => {
+
+        task.title = task.title.trim();
 
         if(!task.title.trim()) {
             setError('Title is required');
