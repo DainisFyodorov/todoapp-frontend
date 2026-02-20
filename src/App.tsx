@@ -8,6 +8,7 @@ import { LoginPage } from './layouts/Auth/LoginPage';
 import { RegisterPage } from './layouts/Auth/RegisterPage';
 import { ProtectedRoute } from './utils/ProtectedRoute';
 import { TodosPage } from './layouts/TodoPage/TodosPage';
+import { NotFoundPage } from './layouts/Util/NotFoundPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             </ProtectedRoute>
           }>
           </Route>
+          <Route path='*' Component={NotFoundPage} />
         </Routes>
 
         <Footer />
