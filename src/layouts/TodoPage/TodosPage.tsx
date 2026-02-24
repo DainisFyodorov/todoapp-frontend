@@ -6,6 +6,7 @@ import { EditRow } from "./components/EditRow";
 import { Todo } from "./components/Todo";
 import extractErrorMessage from "../../utils/ExtractErrorMessage";
 import { SpinnerLoading } from "../Util/SpinnerLoading";
+import CategoryModel from "../../models/CategoryModel";
 
 export const TodosPage = () => {
 
@@ -18,22 +19,42 @@ export const TodosPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
+    const [categories, setCategories] = useState<CategoryModel[]>([]);
+    const [newCategoryId, setNewCategoryId] = useState<number | null>(null);
+
     useEffect(() => {
-        const fetchTodos = async () => {
-            if(!isLoggedIn) {
-                throw new Error('You must be logged in');
+
+        if(!isLoggedIn) {
+            setError('You must be logged in');
+            return;
+        }
+
+        const fetchCategoriesAndTodos = async () => {
+            const categoriesResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/category`, {
+                credentials: 'include'
+            });
+
+            if(!categoriesResponse.ok) {
+                throw new Error(await extractErrorMessage(categoriesResponse));
             }
+
+            const categoriesResponseJson = await categoriesResponse.json();
+            setCategories(categoriesResponseJson);
 
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/task/get`, {
                 credentials: 'include'
             });
+
+            if(!response.ok) {
+                throw new Error(await extractErrorMessage(response));
+            }
 
             const data = await response.json();
             setTodos(data);
             setLoading(false);
         };
 
-        fetchTodos().catch((error: any) => {
+        fetchCategoriesAndTodos().catch((error: any) => {
             setError(error.message);
         });
     }, [isLoggedIn]);
@@ -48,7 +69,7 @@ export const TodosPage = () => {
             return;
         }
 
-        const taskToAdd = new AddTaskRequest(newTitleTrimmed, newDescription, false);
+        const taskToAdd = new AddTaskRequest(newTitleTrimmed, newDescription, false, newCategoryId);
 
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/task/create`, {
             method: 'POST',
@@ -69,6 +90,7 @@ export const TodosPage = () => {
 
         setNewTitle("");
         setNewDescription("");
+        setNewCategoryId(null);
     };
 
     const updateTask = async (task: TaskModel) => {
@@ -168,6 +190,19 @@ export const TodosPage = () => {
                     {/* ADD FORM */}
                     <div className="card mb-4 shadow-sm">
                         <div className="card-body">
+                            <select
+                                className="form-select mb-2"
+                                value={newCategoryId ?? ""}
+                                onChange={e => setNewCategoryId(e.target.value ? Number(e.target.value) : null)}>
+
+                                <option value="">No category</option>
+                                {categories.map(c => (
+                                    <option key={c.id} value={c.id}>
+                                        {c.name}
+                                    </option>
+                                ))}
+
+                            </select>
                             <input
                                 className="form-control mb-2"
                                 placeholder="Task title"
@@ -201,11 +236,12 @@ export const TodosPage = () => {
                                 {editingId === todo.id ? (
                                     <EditRow
                                         todo={todo}
+                                        categories={categories}
                                         onSave={saveEdit}
                                         onCancel={() => setEditingId(null)}
                                     />
                                 ) : (
-                                    <Todo todo={todo} startEdit={startEdit} deleteTodo={deleteTodo} toggleCompleted={toggleCompleted} />
+                                    <Todo todo={todo} categories={categories} startEdit={startEdit} deleteTodo={deleteTodo} toggleCompleted={toggleCompleted} />
                                 )}
 
                             </div>

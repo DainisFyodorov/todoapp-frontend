@@ -1,6 +1,7 @@
+import CategoryModel from "../../../models/CategoryModel"
 import TaskModel from "../../../models/TaskModel"
 
-export const Todo:React.FC<{ todo: TaskModel, startEdit: any, deleteTodo: any, toggleCompleted: any }> = (props) => {
+export const Todo:React.FC<{ todo: TaskModel, categories: CategoryModel[], startEdit: any, deleteTodo: any, toggleCompleted: any }> = (props) => {
     return (
         <div className="d-flex justify-content-between align-items-start">
             <div className="d-flex">
@@ -12,6 +13,11 @@ export const Todo:React.FC<{ todo: TaskModel, startEdit: any, deleteTodo: any, t
                 />
 
                 <div className="ms-3">
+                    {props.todo.categoryId && (
+                        <span className="badge bg-secondary mb-1">
+                            {props.categories.find(c => c.id === props.todo.categoryId)?.name}
+                        </span>
+                    )}
                     <h6 className={`mb-1 ${props.todo.completed ? "text-decoration-line-through text-muted" : ""}`}>
                         {props.todo.title}
                     </h6>
