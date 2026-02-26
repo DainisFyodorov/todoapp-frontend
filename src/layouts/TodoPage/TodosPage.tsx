@@ -7,6 +7,7 @@ import { Todo } from "./components/Todo";
 import extractErrorMessage from "../../utils/ExtractErrorMessage";
 import { SpinnerLoading } from "../Util/SpinnerLoading";
 import CategoryModel from "../../models/CategoryModel";
+import { CategoryManager } from "./components/CategoryManager";
 
 export const TodosPage = () => {
 
@@ -58,6 +59,60 @@ export const TodosPage = () => {
             setError(error.message);
         });
     }, [isLoggedIn]);
+
+    const createCategory = async (name: string) => {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/category`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name })
+        });
+
+        if(!response.ok) {
+            setError(await extractErrorMessage(response));
+            return;
+        }
+
+        const responseJson = await response.json();
+        setCategories(prev => [...prev, responseJson]);
+    }
+
+    const updateCategory = async (id: number, name: string) => {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/category/${id}`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id, name })
+        })
+
+        if(!response.ok) {
+            setError(await extractErrorMessage(response));
+            return;
+        }
+
+        const responseJson = await response.json();
+        setCategories(prev =>
+            prev.map(c => (c.id === id ? responseJson : c))
+        );
+    }
+
+    const deleteCategory = async (id: number) => {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/category/${id}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+
+        if(!response.ok) {
+            setError(await extractErrorMessage(response));
+            return;
+        }
+
+        setCategories(prev => prev.filter(c => c.id !== id));
+    }
 
     const addTodo = async () => {
         setError(null);
@@ -186,6 +241,13 @@ export const TodosPage = () => {
                             <button type="button" className="btn-close" onClick={() => setError(null)} />
                         </div>
                     )}
+
+                    <CategoryManager
+                        categories={categories}
+                        onCreate={name => createCategory(name)}
+                        onUpdate={(id, name) => updateCategory(id, name)}
+                        onDelete={id => deleteCategory(id)}
+                    />
 
                     {/* ADD FORM */}
                     <div className="card mb-4 shadow-sm">

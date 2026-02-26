@@ -1,10 +1,10 @@
 class CategoryModel {
-    id?: number;
+    id: number;
     name: string;
 
-    constructor(name: string, id?: number) {
-        this.name = name;
+    constructor(id: number, name: string) {
         this.id = id;
+        this.name = name;
     }
 }
 
