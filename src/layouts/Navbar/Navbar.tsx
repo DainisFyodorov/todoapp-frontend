@@ -25,9 +25,14 @@ export const Navbar = () => {
                             <Link className="nav-link" aria-current="page" to="/">Home</Link>
                         </li>
                         {isLoggedIn && 
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/todos">ToDos</Link>
-                            </li>
+                            <>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/todos">ToDos</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/categories">Categories</Link>
+                                </li>
+                            </>
                         }
                     </ul>
                     {isLoggedIn ?
