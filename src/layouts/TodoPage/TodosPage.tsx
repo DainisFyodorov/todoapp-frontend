@@ -78,6 +78,11 @@ export const TodosPage = () => {
         e.preventDefault();
         setError(null);
 
+        if(!title.trim()) {
+            setError('Title is required');
+            return;
+        }
+
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/task/create`, {
                 method: 'POST',
@@ -102,6 +107,14 @@ export const TodosPage = () => {
     };
 
     const updateTask = async (task: TaskModel) => {
+
+        task.title = task.title.trim();
+
+        if(!task.title) {
+            setError('Title is required');
+            return;
+        }
+
         try {
             await fetch(`${process.env.REACT_APP_API_URL}/api/task/update/${task.id}`, {
                 method: 'PUT',
