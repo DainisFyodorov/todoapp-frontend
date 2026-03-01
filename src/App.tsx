@@ -9,6 +9,7 @@ import { RegisterPage } from './layouts/Auth/RegisterPage';
 import { ProtectedRoute } from './utils/ProtectedRoute';
 import { TodosPage } from './layouts/TodoPage/TodosPage';
 import { NotFoundPage } from './layouts/Util/NotFoundPage';
+import { CategoriesPage } from './layouts/CategoryPage/CategoriesPage';
 
 function App() {
   return (
@@ -26,6 +27,11 @@ function App() {
             </ProtectedRoute>
           }>
           </Route>
+          <Route path='/categories' element={
+            <ProtectedRoute>
+              <CategoriesPage />
+            </ProtectedRoute>
+          } />
           <Route path='*' Component={NotFoundPage} />
         </Routes>
 
