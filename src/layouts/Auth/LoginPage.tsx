@@ -97,6 +97,14 @@ export const LoginPage = () => {
                             </form>
 
                             <div className="text-center mt-3">
+                                <a href={`${process.env.REACT_APP_API_URL}/oauth2/authorization/google`}>Login with Google</a>
+                            </div>
+
+                            <div className="text-center mt-3">
+                                <a href={`${process.env.REACT_APP_API_URL}/oauth2/authorization/github`}>Login with GitHub</a>
+                            </div>
+
+                            <div className="text-center mt-3">
                                 <small className="text-muted">
                                     Don't have an account?{" "}
                                     <Link to='/register'>Register</Link>
