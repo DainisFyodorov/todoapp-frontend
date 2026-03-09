@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
 
-    const { setIsLoggedIn } = useAuth();
+    const { checkAuth } = useAuth();
     const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
@@ -41,7 +41,8 @@ export const LoginPage = () => {
                 throw new Error('Invalid username or password');
             }
 
-            setIsLoggedIn(true);
+            await checkAuth();
+
             navigate('/', { replace: true })
         } catch (error: any) {
             setError(error.message);

@@ -4,6 +4,8 @@ import { SpinnerLoading } from "../layouts/Util/SpinnerLoading";
 interface AuthContextType {
     isLoggedIn: boolean;
     setIsLoggedIn: (value: boolean) => void;
+    username: string;
+    setUsername: (value: string) => void;
     checkAuth: () => Promise<void>;
 }
 
@@ -11,19 +13,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(true);
 
     const checkAuth = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/status`, { credentials: 'include' });
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, { credentials: 'include' });
             
             if (!response.ok) {
                 throw new Error('Something went wrong');
             }
 
             const data = await response.json();
-
-            setIsLoggedIn(data.isLoggedIn);
+            console.log(data);
+            setUsername(data.username);
+            setIsLoggedIn(data.loggedIn);
             setLoading(false);
         } catch {
             setIsLoggedIn(false);
@@ -41,7 +45,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, checkAuth }}>
+        <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, username, setUsername, checkAuth }}>
             {!loading && children}
         </AuthContext.Provider>
     );

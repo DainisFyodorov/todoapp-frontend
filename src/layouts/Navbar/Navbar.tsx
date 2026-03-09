@@ -3,7 +3,7 @@ import { useAuth } from "../../utils/AuthProvider";
 
 export const Navbar = () => {
 
-    const { isLoggedIn, setIsLoggedIn } = useAuth();
+    const { isLoggedIn, username, setIsLoggedIn } = useAuth();
 
     const handleLogout = async () => {
         await fetch(`${process.env.REACT_APP_API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
@@ -36,7 +36,12 @@ export const Navbar = () => {
                         }
                     </ul>
                     {isLoggedIn ?
-                        <button type="button" className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
+                        <div className="d-flex gap-3 justify-content-start">
+                            <span className="navbar-text">
+                                {username}
+                            </span>
+                            <button type="button" className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
+                        </div>
                         :
                         <div className="d-flex justify-content-start">
                             <Link className="btn btn-outline-success me-2" to="/login">Sign In</Link>
