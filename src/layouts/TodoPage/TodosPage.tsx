@@ -74,7 +74,12 @@ export const TodosPage = () => {
                 throw new Error(await extractErrorMessage(response));
             }
 
-            setPriorities(await response.json());
+            const responseJson = await response.json();
+            setPriorities(responseJson);
+
+            if(responseJson && responseJson.length > 0) {
+                setPriority(responseJson[0]);
+            }
         } catch(error: any) {
             setError(error.message);
         }
@@ -92,9 +97,8 @@ export const TodosPage = () => {
         loadCategories();
         loadPriorities();
 
-        setPriority(priorities[0]);
         setIsLoading(false);
-    }, [isLoggedIn, priorities]);
+    }, [isLoggedIn]);
 
     if(isLoading) {
         return <SpinnerLoading />
