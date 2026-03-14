@@ -142,7 +142,13 @@ export const TodosPage = () => {
             setTitle("");
             setDescription("");
             setCategoryId("");
-            setPriority("");
+
+            if(priorities.length > 0) {
+                setPriority(priorities[0]);
+            } else {
+                setPriority("");
+            }
+            
             loadTasks();
         } catch(error: any) {
             setError(error.message);
