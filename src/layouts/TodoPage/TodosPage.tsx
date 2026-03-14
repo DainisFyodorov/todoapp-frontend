@@ -239,7 +239,7 @@ export const TodosPage = () => {
                                 }
                             >
                                 {priorities.map(p => (
-                                    <option key={p} value={p}>{p}</option>
+                                    <option key={p} value={p}>{PRIORITY_MAP[p]?.label || p}</option>
                                 ))}
                             </select>
                         </div>
