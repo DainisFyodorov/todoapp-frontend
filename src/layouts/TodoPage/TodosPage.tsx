@@ -16,11 +16,19 @@ export const TodosPage = () => {
 
     const [tasks, setTasks] = useState<TaskModel[]>([]);
     const [categories, setCategories] = useState<CategoryModel[]>([]);
+    const [priorities, setPriorities] = useState<string[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [categoryId, setCategoryId] = useState<number | "">("");
+    const [priority, setPriority] = useState("");
+
+    const PRIORITY_MAP: Record<string, { color: string; label: string } | undefined> = {
+        LOW: { color: 'bg-info text-dark', label: 'Low' },
+        MEDIUM: { color: 'bg-warning text-dark', label: 'Medium' },
+        HIGH: { color: 'bg-danger', label: 'High' }
+    }
 
     const loadTasks = async () => {
         try {
@@ -56,6 +64,27 @@ export const TodosPage = () => {
         }
     };
 
+    const loadPriorities = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/task/priorities`, {
+                credentials: 'include'
+            });
+
+            if(!response.ok) {
+                throw new Error(await extractErrorMessage(response));
+            }
+
+            const responseJson = await response.json();
+            setPriorities(responseJson);
+
+            if(responseJson && responseJson.length > 0) {
+                setPriority(responseJson[0]);
+            }
+        } catch(error: any) {
+            setError(error.message);
+        }
+    }
+
     useEffect(() => {
         
         if(!isLoggedIn) {
@@ -66,6 +95,7 @@ export const TodosPage = () => {
         
         loadTasks();
         loadCategories();
+        loadPriorities();
 
         setIsLoading(false);
     }, [isLoggedIn]);
@@ -90,7 +120,7 @@ export const TodosPage = () => {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify(new AddTaskRequest(title, description, false, categoryId === "" ? null : categoryId))
+                body: JSON.stringify(new AddTaskRequest(title, description, false, categoryId === "" ? null : categoryId, priority))
             });
 
             if(!response.ok) {
@@ -100,6 +130,7 @@ export const TodosPage = () => {
             setTitle("");
             setDescription("");
             setCategoryId("");
+            setPriority("");
             loadTasks();
         } catch(error: any) {
             setError(error.message);
@@ -199,6 +230,20 @@ export const TodosPage = () => {
                             </select>
                         </div>
 
+                        <div className="mb-2">
+                            <select 
+                                className="form-select"
+                                value={priority}
+                                onChange={e =>
+                                    setPriority(e.target.value)
+                                }
+                            >
+                                {priorities.map(p => (
+                                    <option key={p} value={p}>{PRIORITY_MAP[p]?.label || p}</option>
+                                ))}
+                            </select>
+                        </div>
+
                         <button className="btn btn-primary">Add task</button>
                     </form>
                 </div>
@@ -248,23 +293,31 @@ export const TodosPage = () => {
                                             onDragStart={() => setDraggedTask(task)}
                                         >
                                             <div className="card-body p-2">
-                                                <div className="d-flex justify-content-between align-items-center">
-                                                    <div>
+                                                <div className="d-flex justify-content-between align-items-start">
+                                                    <div className="d-flex align-items-start flex-grow-1">
                                                         <input 
                                                             type="checkbox"
-                                                            className="form-check-input me-2"
+                                                            className="form-check-input me-2 mt-1"
                                                             checked={task.completed}
-                                                            onChange={() => 
-                                                                updateTask({
-                                                                    ...task,
-                                                                    completed: !task.completed
-                                                                })
-                                                            }
+                                                            onChange={() => updateTask({ ...task, completed: !task.completed })}
                                                         />
-                                                        <strong className={task.completed ? "text-decoration-line-through" : ""}>
-                                                            {task.title}
-                                                        </strong>
+                                                        <div>
+                                                            <strong className={task.completed ? "text-decoration-line-through text-muted" : ""}>
+                                                                {task.title}
+                                                            </strong>
+
+                                                            {/* Task priority */}
+                                                            {task.priority && (
+                                                                <span 
+                                                                    className={`badge ${PRIORITY_MAP[task.priority]?.color || 'bg-secondary'} ms-2`}
+                                                                    style={{ fontSize: '0.65rem', verticalAlign: 'middle' }}
+                                                                >
+                                                                    {PRIORITY_MAP[task.priority]?.label || task.priority}
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                     </div>
+
                                                     <div className="dropdown">
                                                         <button
                                                             className="btn btn-sm btn-light"
@@ -356,6 +409,24 @@ export const TodosPage = () => {
                                         <option value="">No category</option>
                                         {categories.map(c => (
                                             <option key={c.id} value={c.id}>{c.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="mb-2">
+                                    <label className="form-label">Priority</label>
+                                    <select
+                                        className="form-select"
+                                        value={editingTask.priority}
+                                        onChange={e =>
+                                            setEditingTask({
+                                                ...editingTask,
+                                                priority: e.target.value
+                                            })
+                                        }
+                                    >
+                                        {priorities.map(p => (
+                                            <option key={p} value={p}>{PRIORITY_MAP[p]?.label || p}</option>
                                         ))}
                                     </select>
                                 </div>
