@@ -23,11 +23,23 @@ export const TodosPage = () => {
     const [description, setDescription] = useState("");
     const [categoryId, setCategoryId] = useState<number | "">("");
     const [priority, setPriority] = useState("");
+    const [dueDate, setDueDate] = useState("");
 
     const PRIORITY_MAP: Record<string, { color: string; label: string } | undefined> = {
         LOW: { color: 'bg-info text-dark', label: 'Low' },
         MEDIUM: { color: 'bg-warning text-dark', label: 'Medium' },
         HIGH: { color: 'bg-danger', label: 'High' }
+    }
+
+    const isOverdue = (dateString: string | null) => {
+        if(!dateString) return false;
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const dueDate = new Date(dateString);
+        
+        return dueDate < today;
     }
 
     const loadTasks = async () => {
@@ -120,7 +132,7 @@ export const TodosPage = () => {
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include',
-                body: JSON.stringify(new AddTaskRequest(title, description, false, categoryId === "" ? null : categoryId, priority))
+                body: JSON.stringify(new AddTaskRequest(title, description, false, categoryId === "" ? null : categoryId, priority, dueDate))
             });
 
             if(!response.ok) {
@@ -130,7 +142,13 @@ export const TodosPage = () => {
             setTitle("");
             setDescription("");
             setCategoryId("");
-            setPriority("");
+
+            if(priorities.length > 0) {
+                setPriority(priorities[0]);
+            } else {
+                setPriority("");
+            }
+            
             loadTasks();
         } catch(error: any) {
             setError(error.message);
@@ -230,18 +248,31 @@ export const TodosPage = () => {
                             </select>
                         </div>
 
-                        <div className="mb-2">
-                            <select 
-                                className="form-select"
-                                value={priority}
-                                onChange={e =>
-                                    setPriority(e.target.value)
-                                }
-                            >
-                                {priorities.map(p => (
-                                    <option key={p} value={p}>{PRIORITY_MAP[p]?.label || p}</option>
-                                ))}
-                            </select>
+                        <div className="row mb-3">
+                            <div className="col">
+                                <label className="form-label small text-muted">Priority</label>
+                                <select 
+                                    className="form-select"
+                                    value={priority}
+                                    onChange={e =>
+                                        setPriority(e.target.value)
+                                    }
+                                >
+                                    {priorities.map(p => (
+                                        <option key={p} value={p}>{PRIORITY_MAP[p]?.label || p}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="col">
+                                <label className="form-label small text-muted">Due Date</label>
+                                <input 
+                                    type="date"
+                                    className="form-control"
+                                    value={dueDate || ''}
+                                    onChange={e => setDueDate(e.target.value)}
+                                />
+                            </div>
                         </div>
 
                         <button className="btn btn-primary">Add task</button>
@@ -351,6 +382,18 @@ export const TodosPage = () => {
                                                         {task.description}
                                                     </div>
                                                 )}
+
+                                                {task.dueDate && (
+                                                    <div className="mt-2 d-flex align-items-center">
+                                                        <span
+                                                            className={`small ${isOverdue(task.dueDate) && !task.completed ? 'text-danger fw-bold' : 'text-muted'}`}
+                                                            title="Due date"
+                                                        >
+                                                            <i className="bi bi-calendar3 me-1"></i>
+                                                            {new Date(task.dueDate).toLocaleDateString()}
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     ))
@@ -413,23 +456,40 @@ export const TodosPage = () => {
                                     </select>
                                 </div>
 
-                                <div className="mb-2">
-                                    <label className="form-label">Priority</label>
-                                    <select
-                                        className="form-select"
-                                        value={editingTask.priority}
-                                        onChange={e =>
-                                            setEditingTask({
+                                <div className="row mb-2">
+                                    <div className="col">
+                                        <label className="form-label small text-muted">Priority</label>
+                                        <select 
+                                            className="form-select"
+                                            value={editingTask.priority}
+                                            onChange={e =>
+                                                setEditingTask({
+                                                    ...editingTask,
+                                                    priority: e.target.value
+                                                })
+                                            }
+                                        >
+                                            {priorities.map(p => (
+                                                <option key={p} value={p}>{PRIORITY_MAP[p]?.label || p}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="col">
+                                        <label className="form-label small text-muted">Due Date</label>
+                                        <input 
+                                            type="date"
+                                            className="form-control"
+                                            value={editingTask.dueDate || ''}
+                                            onChange={e => setEditingTask({
                                                 ...editingTask,
-                                                priority: e.target.value
-                                            })
-                                        }
-                                    >
-                                        {priorities.map(p => (
-                                            <option key={p} value={p}>{PRIORITY_MAP[p]?.label || p}</option>
-                                        ))}
-                                    </select>
+                                                dueDate: e.target.value
+                                            })}
+                                        />
+                                    </div>
                                 </div>
+
+                                
 
                                 <div className="form-check mt-2">
                                     <input 
